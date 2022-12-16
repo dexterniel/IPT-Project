@@ -1,17 +1,44 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <div class="login">
-  <h1>{% block title %}Sign Up{% endblock %}</h1>
-  </div>
+  <body>
+    <div class="center">
+      <h1>Sign Up</h1>
+      <form method="post">
+        <!--asd-->
+        <div class="txt_field">
+          <input name="firstname" id="firstname" required>
+          <span></span>
+          <label for="firstname">Firstname</label>
+        </div>
+        <div class="txt_field">
+          <input name="lastname" id="lastname" required>
+          <span></span>
+          <label for="lastname">Lastname</label>
+        </div>
+        <!--sdaasd-->
+        <div class="txt_field">
+          <input type="email" name="email" id="email" required>
+           <span></span>
+          <label for="email">Email address</label>
+        </div>
+        <div class="txt_field">
+          <input type="password" name="password" id="password" required>
+          <span></span>
+          <label for="password">Password</label>
+        </div>
+        <div class="txt_field">
+          <input type="password" name="passwords" id="passwords" required>
+          <span></span>
+          <label for="passwords">Confirm Password</label>
+        </div>
+        <input type="submit" value="Signup">
+        <div class="signup_link">
+          Already have an account? <a href="{{ url_for('auth.login') }}">Log In</a>
+        </div>
+      </form>
+    </div>
+  </body>
 {% endblock %}
 
-{% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Sign-up">
-  </form>
-{% endblock %}
+

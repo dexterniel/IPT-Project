@@ -2,16 +2,28 @@
 
 {% block header %}
   <div class="login">
-  <h1>{% block title %}What's on your mind?{% endblock %}</h1>
+  <h1>{% block title %}What's on your mind, {{ g.user['firstname'] }}? {% endblock %}</h1>
     </div>
+
+<div class="createpost">
+  <form method="post">
+    <div class="title">
+    <label for="title">Title</label><br><br>
+    <input name="title" id="title" value="{{ request.form['title'] }}" required><br><br><br>
+    </div>
+    <div class="pbody">
+    <label for="body">Body</label><br><br>
+    <textarea name="body" id="body">{{ request.form['body'] }}</textarea><br><br>
+      </div>
+
+    <div class="upload1">
+    <input type="submit" value="Post">
+    </div>
+  </form>
+</div>
+
+
 {% endblock %}
 
-{% block content %}
-  <form method="post">
-    <label for="title">Title</label>
-    <input name="title" id="title" value="{{ request.form['title'] }}" required>
-    <label for="body">Post</label>
-    <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
-    <input type="submit" value="Upload">
-  </form>
-{% endblock %}
+
+

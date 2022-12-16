@@ -7,6 +7,7 @@ from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
 
+
 from flaskr.auth import login_required
 from flaskr.db import get_db
 
@@ -18,7 +19,7 @@ def index():
     """Show all the posts, most recent first."""
     db = get_db()
     posts = db.execute(
-        "SELECT p.id, title, body, created, author_id, username"
+        "SELECT p.id, title, body, created, author_id, email, firstname,lastname"
         " FROM post p JOIN user u ON p.author_id = u.id"
         " ORDER BY created DESC"
     ).fetchall()
@@ -40,7 +41,7 @@ def get_post(id, check_author=True):
     post = (
         get_db()
         .execute(
-            "SELECT p.id, title, body, created, author_id, username"
+            "SELECT p.id, title, body, created, author_id, email, firstname,lastname"
             " FROM post p JOIN user u ON p.author_id = u.id"
             " WHERE p.id = ?",
             (id,),
@@ -123,3 +124,4 @@ def delete(id):
     db.execute("DELETE FROM post WHERE id = ?", (id,))
     db.commit()
     return redirect(url_for("blog.index"))
+

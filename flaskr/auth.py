@@ -52,29 +52,47 @@ def register():
     """
 
     if request.method == "POST":
-        username = request.form["username"]
+        firstname = request.form["firstname"]
+        lastname = request.form["lastname"]
+        email = request.form["email"]
         password = request.form["password"]
+        passwords = request.form["passwords"]
         db = get_db()
         error = None
 
-        if not username:
-            error = "Username is required."
+        if not firstname:
+            error = "firstname is required."
+        elif not lastname:
+            error = "lastname is required."
+        if not email:
+            error = "Email is required."
         elif not password:
             error = "Password is required."
-        elif any(i.isdigit() for i in username):
-            error = "Numbers is not allowed."
+        elif not passwords:
+            error = "Confirm Password is required."
+        elif any(i.isdigit() for i in firstname):
+            error = "Invalid firstname."
+        elif any(i.isdigit() for i in lastname):
+            error = "Invalid lastname."
+        elif len(password) < 8:
+            error = "Passwords must be between 8 and 16 characters long."
+        elif len(password) > 16:
+            error = "Passwords must be between 8 and 16 characters long."
+        elif passwords != password:
+            error = "Password doesn't match."
+
 
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password)),
+                    "INSERT INTO user (firstname, lastname, email, password) VALUES (?, ?, ?, ?)",
+                    (firstname, lastname, email, generate_password_hash(password)),
                 )
                 db.commit()
             except db.IntegrityError:
                 # The username was already taken, which caused the
                 # commit to fail. Show a validation error.
-                error = f"User {username} is already registered."
+                error = f"User {email} is already registered."
             else:
                 # Success, go to the login page.
                 return redirect(url_for("auth.login"))
@@ -88,16 +106,16 @@ def register():
 def login():
     """Log in a registered user by adding the user id to the session."""
     if request.method == "POST":
-        username = request.form["username"]
+        email = request.form["email"]
         password = request.form["password"]
         db = get_db()
         error = None
         user = db.execute(
-            "SELECT * FROM user WHERE username = ?", (username,)
+            "SELECT * FROM user WHERE email = ?", (email,)
         ).fetchone()
 
         if user is None:
-            error = "Incorrect username."
+            error = "The email you entered isn’t connected to any account."
         elif not check_password_hash(user["password"], password):
             error = "Incorrect password."
 
